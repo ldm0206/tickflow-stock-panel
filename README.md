@@ -35,11 +35,19 @@
 <table>
   <tr>
     <td width="50%" align="center"><b>看板 Dashboard</b></td>
-    <td width="50%" align="center"><b>选股 Screener</b></td>
+    <td width="50%" align="center"><b>策略 Screener</b></td>
   </tr>
   <tr>
     <td width="50%"><img src="./docs/screenshots/dashboard.png" alt="看板页面" title="看板页面"></td>
-    <td width="50%"><img src="./docs/screenshots/screener.png" alt="选股/策略页" title="选股/策略页"></td>
+    <td width="50%"><img src="./docs/screenshots/screener.png" alt="策略页" title="策略页"></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center"><b>监控中心 Monitor</b></td>
+    <td width="50%" align="center"><b>概念分析 Concept</b></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="./docs/screenshots/monitor.png" alt="监控中心" title="监控中心"></td>
+    <td width="50%"><img src="./docs/screenshots/concept-analysis.png" alt="概念分析" title="概念分析"></td>
   </tr>
   <tr>
     <td width="50%" align="center"><b>回测 Backtest</b></td>
@@ -112,11 +120,16 @@
 - **SSE 流式进度**:长任务实时推送进度,支持刷新 / 切页后**重连恢复**(相同参数任务只启动一次)
 - **统计输出**:净值曲线 · 夏普 · 最大回撤 · 胜率 · 每笔交易明细
 
-### 📡 实时监控(Strategy Monitor)
+### 📡 监控中心(Monitor)
 
-- **盘中 SSE 推送**:行情刷新(`quotes_updated`)+ 策略告警(`strategy_alert`)双事件流,前端实时弹通知
-- **策略监控**:订阅策略的 entry / exit 信号 + 自定义提醒条件(如 `rsi_14 > 80`),命中即推送
-- **Webhook 告警**:命中规则后可选推送外部 webhook
+**统一监控规则引擎** —— 一个页面管理所有类型的监控,实时推送 + 持久化触发记录:
+
+- **四类监控**:策略监控 · 个股信号监控(选信号即加) · 个股价格/涨跌监控 · 全市场异动监控
+- **灵活条件**:多条件 AND/OR 组合 + 冷却期去重(防刷屏) + 严重级别(info/warn/critical)
+- **多入口配置**:监控中心页面新建规则 · 个股详情页「加监控」· 策略卡片一键开启
+- **实时 SSE 推送**:命中规则后右下角弹窗通知(可配声效) + 持久化到 `alerts.jsonl`
+- **触发记录**:时间倒序展示,支持按来源过滤 · 单条删除 · 清空 · 点击查看个股日K
+- **菜单未读徽标**:离开监控中心后有新触发,菜单显示未读数;进入页面后清零
 
 ### 🤖 AI 策略生成(可选)
 
@@ -207,7 +220,7 @@ pnpm dev                   # http://localhost:3011
 3. **自选**页:添加跟踪标的;点代码进 **K 线**页看蜡烛图 + 买卖点
 4. **选股**页:点任一内置策略卡片即时扫描;或用自定义信号组合条件
 5. **回测**页:选策略 / 信号 + 时间区间 → 跑回测 → 看净值 / 夏普 / 交易明细(SSE 实时进度)
-6. **监控**页:配置告警规则,盘中 SSE 推送行情与策略信号;命中后写入告警日志(可选 webhook)
+6. **监控中心**页:配置监控规则(策略/个股信号/价格/市场异动),盘中 SSE 实时弹窗通知 + 持久化触发记录;或在个股详情页点「加监控」快速添加
 
 ---
 
@@ -273,7 +286,8 @@ DATA_DIR=./data       # Parquet / DuckDB 数据存储目录
 | **2** | Polars enriched 流水线 + Screener + 信号扫描 | ✅ |
 | **3** | vectorbt 回测 + T+1 + 手续费 + 止损 + max-hold | ✅ |
 | **4** | 监控引擎 + 告警规则 + Webhook + APScheduler 盘后定时 | ✅ |
-| **v2** | 自定义信号 / 策略商店 / AI 策略生成 / 外部数据源插件 / 早晚报 / Onboarding | 🚧 |
+| **5** | 统一监控中心 + 四类监控规则 + 实时推送 + 持久化触发记录 + 声效通知 | ✅ |
+| **v2** | Webhook 推送(QMT/掘金下单) · 板块异动 · 早晚报 · 更多扩展 | 🚧 |
 
 ---
 
